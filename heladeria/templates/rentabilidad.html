@@ -17,11 +17,11 @@
             </button>
         </div>
         <div class="col-md-3">
-            <select class="form-select" aria-label="Default select example">
-                <option selected>Selecciona Categoría 1</option>
-                <option value="1">Helados de Hielo</option>
-                <option value="2">Helados de Crema</option>
-                <option value="3">Postres con Queso</option>
+            <select class="form-select" id="categoria1" aria-label="Default select example">
+                <option selected disabled>Selecciona Categoría 1</option>
+                    {% for categoria in categorias %}
+                    <option value="{{ categoria.id }}">{{ categoria.nombre }}</option>
+                    {% endfor %}
               </select>
         </div>
         <div class="col-md-3">
@@ -30,11 +30,11 @@
             </button>
         </div>
         <div class="col-md-3">
-            <select class="form-select" aria-label="Default select example">
-                <option selected>Selecciona Categoría 2</option>
-                <option value="1">Bolos</option>
-                <option value="2">Helados de sabores</option>
-                <option value="3">Helados con Queso</option>
+            <select class="form-select" id="categoria2" aria-label="Default select example">
+                <option selected disabled>Selecciona Categoría 2</option>
+                    {% for categoria in categorias %}
+                    <option value="{{ categoria.id }}">{{ categoria.nombre }}</option>
+                    {% endfor %}
               </select>
         </div>
     </div>
@@ -45,14 +45,10 @@
                 <i class="fas fa-info-circle me-2"></i>
                 <h5>Datos Categoría 1</h5>
             </div>
-            <textarea class="form-control mb-2" rows="3">
-                - Costo promedio de productos:
-                - Precio de venta promedio:
-                - Rentabilidad:
-            </textarea>
+            <textarea id="datosCategoria1" class="form-control mb-2" rows="3" readonly></textarea>
         </div>
         <div class="col-md-4 d-flex justify-content-center align-items-center">
-            <button class="btn btn-primary">
+            <button id="calcularRentabilidad" class="btn btn-primary">
                 <i class="bi bi-caret-right"></i>
                 Calcular Rentabilidad
             </button>
@@ -62,29 +58,181 @@
                 <i class="fas fa-info-circle me-2"></i>
                 <h5>Datos Categoría 2</h5>
             </div>
-            <textarea class="form-control mb-2" rows="3">
-                - Costo promedio de productos:
-                - Precio de venta promedio:
-                - Rentabilidad:
-            </textarea>
+            <textarea id="datosCategoria2" class="form-control mb-2" rows="3" readonly></textarea>
         </div>
     </div>
 
     <div class="d-flex justify-content-center align-items-center mt-4">
-        <div class="d-flex flex-column align-items-start me-3">
+        <div class="d-flex flex-column align-items-start me-5">
             <div class="d-flex align-items-center mb-2">
                 <i class="fas fa-info-circle me-2"></i>
                 <h5>RESULTADO FINAL:</h5>
             </div>
-            <textarea class="form-control mb-2" style="height: 200px; width: 100%;">
-                Luego de comparar ambas categorías se tiene que la Categoría 1 es más rentable, con un valor promedio de: 
-            </textarea>
+            <textarea id="resultadoFinal" class="form-control mb-2" style="height: 200px; width: 100%;" readonly></textarea>
         </div>
-        <button class="btn btn-warning">
-            <i class="bi bi-arrow-clockwise me-2"></i>
-            Actualizar
-        </button>
+        <div class="me-5">
+            <table class="table table-bordered text-center">
+                <thead>
+                    <tr>
+                        <th>Rango</th>
+                        <th>Detalle</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td id="celda1-1">0.00 - 0.40</td>
+                        <td id="celda1-2">Baja</td>
+                    </tr>
+                    <tr>
+                        <td id="celda2-1">0.41 - 0.80</td>
+                        <td id="celda2-2">Mínima</td>
+                    </tr>
+                    <tr>
+                        <td id="celda3-1">0.81 - 1.20</td>
+                        <td id="celda3-2">Regular</td>
+                    </tr>
+                    <tr>
+                        <td id="celda4-1">1.21 - 1.60</td>
+                        <td id="celda4-2">Buena</td>
+                    </tr>
+                    <tr>
+                        <td id="celda5-1">1.61 - 2.00</td>
+                        <td id="celda5-2">Excelente</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="d-flex justify-content-center align-items-center">
+            <button id="actualizar" class="btn btn-warning">
+                <i class="bi bi-arrow-clockwise me-2"></i>
+                Actualizar
+            </button>
+        </div>
     </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const categoria1Select = document.getElementById("categoria1");
+            const categoria2Select = document.getElementById("categoria2");
+            const calcularBtn = document.getElementById("calcularRentabilidad");
+            const resultadoTextarea = document.getElementById("resultadoFinal");
+            const actualizarBtn = document.getElementById("actualizar");
+            const datosCategoria1 = document.getElementById("datosCategoria1");
+            const datosCategoria2 = document.getElementById("datosCategoria2");
+
+            // Filtrar categorías disponibles
+            categoria1Select.addEventListener("change", function () {
+                const categoria1Seleccionada = categoria1Select.value;
+
+                // Deshabilitar la categoría seleccionada en el segundo select
+                Array.from(categoria2Select.options).forEach(option => {
+                    option.disabled = option.value === categoria1Seleccionada;
+                });
+            });
+
+            // Filtrar categorías disponibles en el primer select
+            categoria2Select.addEventListener("change", function () {
+                const categoria2Seleccionada = categoria2Select.value;
+
+                // Deshabilitar la categoría seleccionada en el primer select
+                Array.from(categoria1Select.options).forEach(option => {
+                    option.disabled = option.value === categoria2Seleccionada;
+                });
+            });
+
+            // Calcular rentabilidad
+            calcularBtn.addEventListener("click", function () {
+                const categoria1 = categoria1Select.value;
+                const categoria2 = categoria2Select.value;
+
+                // Validar selección
+                if (!categoria1 || !categoria2) {
+                    alert("Por favor selecciona ambas categorías");
+                    return;
+                }
+
+                // Enviar datos al servidor
+                fetch("{% url 'calcular_rentabilidad' %}", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRFToken": "{{ csrf_token }}"
+                    },
+                    body: JSON.stringify({
+                        categoria1: categoria1,
+                        categoria2: categoria2
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        alert(data.error);
+                    } else {
+                        // Convertir valores a números
+                        const costoPromedio1 = parseFloat(data.categoria1?.costo_promedio) || 0;
+                        const precioPromedio1 = parseFloat(data.categoria1?.precio_promedio) || 0;
+                        const rentabilidad1 = parseFloat(data.categoria1?.rentabilidad) || 0;
+
+                        const costoPromedio2 = parseFloat(data.categoria2?.costo_promedio) || 0;
+                        const precioPromedio2 = parseFloat(data.categoria2?.precio_promedio) || 0;
+                        const rentabilidad2 = parseFloat(data.categoria2?.rentabilidad) || 0;
+
+                        const rentabilidadResultado = parseFloat(data.resultado?.rentabilidad) || 0;
+                        
+                        // Funcion para la clasificacion de rentabilidad
+                        function obtenerDetalleRentabilidad(valorRentabilidad) {
+                            const filas = document.querySelectorAll("table tbody tr");
+                            let detalle = "No definido";
+
+                            filas.forEach(fila => {
+                                const rangoTexto = fila.cells[0].textContent.trim();
+                                const detalleTexto = fila.cells[1].textContent.trim();
+                                const [min, max] = rangoTexto.split(" - ").map(Number);
+
+                                // Verificar si el valor de rentabilidad está dentro del rango
+                                if (valorRentabilidad >= min && valorRentabilidad <= max) {
+                                    detalle = detalleTexto;
+                                }
+                            });
+
+                            return detalle;
+                        }
+
+                        // Usar las variables convertidas
+                        datosCategoria1.value = `
+                            Costo promedio: $${costoPromedio1.toFixed(2)}
+                            Precio promedio: $${precioPromedio1.toFixed(2)}
+                            Rentabilidad: ${rentabilidad1.toFixed(2)}
+                            Clasificación: ${obtenerDetalleRentabilidad(rentabilidad1)}
+                        `;
+                        datosCategoria2.value = `
+                            Costo promedio: $${costoPromedio2.toFixed(2)}
+                            Precio promedio: $${precioPromedio2.toFixed(2)}
+                            Rentabilidad: ${rentabilidad2.toFixed(2)}
+                            Clasificación: ${obtenerDetalleRentabilidad(rentabilidad2)}
+                        `;
+                        resultadoTextarea.value = `
+                            Categoría más rentable: ${data.resultado?.categoria_mas_rentable || 'N/A'}
+                            Rentabilidad: ${rentabilidadResultado.toFixed(2)}
+                            Clasificación: ${obtenerDetalleRentabilidad(rentabilidadResultado)}
+                        `.trim();
+                    }
+                })
+                .catch(error => console.error(error));
+            });
+
+            // Refrescar página
+            actualizarBtn.addEventListener("click", function () {
+                window.location.reload();
+                
+                // Habilitar todas las opciones
+                Array.from(categoria2Select.options).forEach(option => {
+                    option.disabled = false;
+                });
+            });
+        });
+    
+    </script>
     
     
 {% endblock %}

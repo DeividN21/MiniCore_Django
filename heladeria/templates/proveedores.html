@@ -15,7 +15,13 @@
     action="proveedores/guardar">
             {% csrf_token %}
             Nombre del Proveedor: <input type="text" name="nombreProveedor" class="form-control my-2" required>
-            Categoria Suministrada: <input type="text" name="categoriaSuministrada" class="form-control my-2" required>
+            Categoria Suministrada:
+                <select name="categoria" class="form-select" aria-label="Default select example" required>
+                    <option selected></option>
+                    {% for categoria in categorias %}
+                        <option value="{{ categoria.id }}">{{ categoria.nombre }}</option>
+                    {% endfor %}
+                </select>
             Costo de Insumo: <input type="float" name="costoInsumo" class="form-control my-2" required>
             Frecuencia de Entrega: <input type="number" name="tiempoEntrega" class="form-control my-2" required>
 
@@ -36,7 +42,7 @@
         {% for proveedor in proveedores %}
         <tr>
             <td>{{ proveedor.nombreProveedor }}</td>
-            <td>{{ proveedor.categoriaSuministrada }}</td>
+            <td>{{ proveedor.categoriaProv }}</td>
             <td>{{ proveedor.costoInsumo }}</td>
             <td>{{ proveedor.tiempoEntrega }}</td>
             <td>

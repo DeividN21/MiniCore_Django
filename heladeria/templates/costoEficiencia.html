@@ -18,11 +18,11 @@
             </button>
         </div>
         <div class="col-md-3">
-            <select class="form-select" aria-label="Default select example">
-                <option selected>Selecciona Categoría</option>
-                <option value="1">Helados de Hielo</option>
-                <option value="2">Helados de Crema</option>
-                <option value="3">Postres con Queso</option>
+            <select class="form-select" id="categoria1" aria-label="Default select example">
+                <option selected disabled>Selecciona Categoría</option>
+                    {% for categoria in categorias %}
+                    <option value="{{ categoria.id }}">{{ categoria.nombre }}</option>
+                    {% endfor %}
               </select>
         </div>
     </div>

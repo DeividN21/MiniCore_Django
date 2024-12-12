@@ -16,8 +16,20 @@
         value="{{ producto.nombre }}">
         Precio: <input type="float" name="precio" class="form-control my-2" required
         value="{{ producto.precio }}">
+        Costo: <input type="float" name="costo" class="form-control my-2" required
+        value="{{ producto.costo }}">
         Cantidad: <input type="number" name="cantidad" class="form-control my-2" required
         value="{{ producto.cantidad }}">
+        Categoria:
+                <select name="categoria" class="form-select" aria-label="Default select example" required>
+                    <option selected></option>
+                    {% for categoria in categorias %}
+                        <option value="{{ categoria.id }}"
+                        {% if categoria.id == producto.categoriaPr.id %}selected{% endif %}>
+                            {{ categoria.nombre }}
+                        </option>
+                    {% endfor %}
+                </select>
         Descripcion:
         <textarea class="form-control my-2" name="descripcion">
             {{ producto.descripcion }}

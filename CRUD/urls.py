@@ -36,4 +36,5 @@ urlpatterns = [
     path('rentabilidad', views.consultarRentabilidad, name='consultarRentabilidad'),
     path('costoEficiencia', views.consultarCostoEficiencia, name='consultarCostoEficiencia'),
     path('salir/',views.salir, name='salir'),
+    path('calcular-rentabilidad/', views.calcular_rentabilidad, name='calcular_rentabilidad'),
 ]

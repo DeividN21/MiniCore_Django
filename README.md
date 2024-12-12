@@ -1,0 +1,1 @@
+# MiniCore_Django

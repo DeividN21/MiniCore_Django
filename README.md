@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Tarea 5: Administración MVC
 
 # Objetivo
@@ -39,3 +40,6 @@ Presentar de manera general la administración del proyecto Core MVC, en base a 
   
 # Enlace con el deploy
 - enlace
+=======
+# MiniCore_Django
+>>>>>>> b52a5e6fd13000932cceba961b6ebe95a341c403

@@ -1,14 +1,13 @@
-<<<<<<< HEAD
-# Tarea 5: Administración MVC
+# MiniCore MVT
 
 # Objetivo
-Presentar de manera general la administración del proyecto Core MVC, en base a lo planteado en el documento de análisis aprobado.
+Presentar las funcionalidades del proyecto Core MVC, en base a lo planteado en el documento de análisis aprobado.
 
 # Sobre el Proyecto
 ### Descripción
 - Como primer instancia, se creó el proyecto enfocado para su respectiva implementación en un negocio real llamado "El Rincón del Sabor",
   que corresponde a una heladería ubicada en la ciudad de Quito, en el sector de Las Casas.
-- Para esta fase del proyecto se agregó la funcionalidad de CRUD para "Proveedores" y se creó la vista de los módulos de "Rentabilidad" y "Costo-Eficiencia" para su respectiva implementación a futuro. 
+- Para esta fase final del proyecto se implementaron las funcionalidades de los módulos de "Rentabilidad" y "Costo-Eficiencia".
 - Igualmente se permite crear nuevos usuarios así como su logueo respectivo para ingresar a las funcionalidades de CRUD y del MiniCore como tal.
 - Además, cabe recalcar que se implementó un método de cifrado como alternativa de seguridad dentro de la información que se ingresa al momento de crear una nueva cuenta.
 - Así también, se insertó un control para que usuarios no identificados o "no logueados" no tengan la capacidad de ingresar dentro de los otros módulos de la página.
@@ -36,10 +35,7 @@ Presentar de manera general la administración del proyecto Core MVC, en base a 
 - Si el usuario quiere salir puede aplastar el botón de "Cerrar Sesión", el cual redirige a la página web principal.
 
 # Enlace del Video de Demostración
-- https://youtu.be/WDYabxzt5pk
+- enlace
   
 # Enlace con el deploy
 - enlace
-=======
-# MiniCore_Django
->>>>>>> b52a5e6fd13000932cceba961b6ebe95a341c403

@@ -11,54 +11,51 @@
         <h3>Por favor, selecciona una categoría:</h3>
     </div>
 
-    <div class="row text-center mb-4">
-        <div class="col-md-3">
-            <button class="btn btn-success">
-                Categoría:
-            </button>
-        </div>
-        <div class="col-md-3">
-            <select class="form-select" id="categoria1" aria-label="Default select example">
-                <option selected disabled>Selecciona Categoría</option>
+    <form id="formSeleccion" method="post" class="mb-4">
+        {% csrf_token %}
+        <div class="row text-center mb-4">
+            <div class="col-md-3">
+                <button class="btn btn-success" type="button">
+                    Categoría:
+                </button>
+            </div>
+            <div class="col-md-3">
+                <select class="form-select" name="categoria_id" id="categoria_id" onchange="fetchProveedores(this.value)">
+                    <option value="" disabled selected>Selecciona una Categoría</option> 
                     {% for categoria in categorias %}
                     <option value="{{ categoria.id }}">{{ categoria.nombre }}</option>
                     {% endfor %}
-              </select>
+                </select>
+            </div>
         </div>
-    </div>
 
-    <div class="m-4">
-        <h3>A continuación, selecciona dos proveedores para analizar:</h3>
-    </div>
+        <div class="m-4">
+            <h3>A continuación, selecciona dos proveedores para analizar:</h3>
+        </div>
 
-    <div class="row text-center mb-4">
-        <div class="col-md-3">
-            <button class="btn btn-success">
-                Proveedor 1:
-            </button>
+        <div class="row text-center mb-4">
+            <div class="col-md-3">
+                <button class="btn btn-success" type="button">
+                    Proveedor 1:
+                </button>
+            </div>
+            <div class="col-md-3">
+                <select class="form-select" name="proveedor1_id" id="proveedor1_id" disabled>
+                    <option value="" disabled selected>Selecciona Proveedor 1</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <button class="btn btn-success" type="button">
+                    Proveedor 2:
+                </button>
+            </div>
+            <div class="col-md-3">
+                <select class="form-select" name="proveedor2_id" id="proveedor2_id" disabled>
+                    <option value="" disabled selected>Selecciona Proveedor 2</option> 
+                </select>
+            </div>
         </div>
-        <div class="col-md-3">
-            <select class="form-select" aria-label="Default select example">
-                <option selected>Selecciona Proveedor 1</option>
-                <option value="1">Equadis</option>
-                <option value="2">Soldis</option>
-                <option value="3">Quala</option>
-              </select>
-        </div>
-        <div class="col-md-3">
-            <button class="btn btn-success">
-                Proveedor 2:
-            </button>
-        </div>
-        <div class="col-md-3">
-            <select class="form-select" aria-label="Default select example">
-                <option selected>Selecciona Proveedor 2</option>
-                <option value="1">La Italiana</option>
-                <option value="2">Disasvet</option>
-                <option value="3">Quala</option>
-              </select>
-        </div>
-    </div>
+    </form>
 
     <div class="row text-center mb-4 m-5">
         <div class="col-md-4">
@@ -66,14 +63,10 @@
                 <i class="fas fa-info-circle me-2"></i>
                 <h5>Datos Proveedor 1</h5>
             </div>
-            <textarea class="form-control mb-2" rows="3">
-                - Costo de insumo($):
-                - Tiempo de entrega (días):
-                - Costo-Eficiencia(%):
-            </textarea>
+            <textarea id="datosProveedor1" class="form-control mb-2" rows="3" readonly></textarea>
         </div>
         <div class="col-md-4 d-flex justify-content-center align-items-center">
-            <button class="btn btn-success">
+            <button id="calcularCostoEficiencia" class="btn btn-success">
                 <i class="bi bi-caret-right"></i>
                 Calcular Costo-Eficiencia
             </button>
@@ -83,11 +76,7 @@
                 <i class="fas fa-info-circle me-2"></i>
                 <h5>Datos Proveedor 2</h5>
             </div>
-            <textarea class="form-control mb-2" rows="3">
-                - Costo de insumo($):
-                - Tiempo de entrega (días):
-                - Costo-Eficiencia(%):
-            </textarea>
+            <textarea id="datosProveedor2" class="form-control mb-2" rows="3" readonly></textarea>
         </div>
     </div>
 
@@ -97,13 +86,84 @@
                 <i class="fas fa-info-circle me-2"></i>
                 <h5>RESULTADO FINAL:</h5>
             </div>
-            <textarea class="form-control mb-2" style="height: 250px; width: 100%;">
-                Luego de comparar ambos proveedores se tiene que la Proveedor 2 brinda un mayor beneficio con respecto al factor costo-eficiencia, con un porcentaje de: 
-            </textarea>
+            <textarea id="resultadoFinal" class="form-control mb-2" style="height: 250px; width: 100%;" readonly></textarea>
         </div>
-        <button class="btn btn-warning">
-            <i class="bi bi-arrow-clockwise me-2"></i>
-            Actualizar
-        </button>
     </div>
+    
+
+    <script>
+        function fetchProveedores(categoriaId) {
+        if (!categoriaId) return;
+
+        fetch(`/proveedores-por-categoria/${categoriaId}/`)
+            .then(response => response.json())
+            .then(data => {
+                const proveedor1Select = document.getElementById('proveedor1_id');
+                const proveedor2Select = document.getElementById('proveedor2_id');
+
+                // Resetear los selects de proveedores
+                proveedor1Select.innerHTML = '<option value="" disabled selected>Selecciona Proveedor 1</option>';
+                proveedor2Select.innerHTML = '<option value="" disabled selected>Selecciona Proveedor 2</option>';
+
+                data.forEach(proveedor => {
+                    const option = new Option(proveedor.nombreProveedor, proveedor.id);
+                    proveedor1Select.add(option.cloneNode(true));
+                    proveedor2Select.add(option.cloneNode(true));
+                });
+
+                // Habilitar los selects de proveedores
+                proveedor1Select.disabled = false;
+                proveedor2Select.disabled = false;
+            })
+            .catch(error => console.error('Error al obtener proveedores:', error));
+        }   
+
+        document.getElementById('calcularCostoEficiencia').addEventListener('click', () => {
+            const categoriaId = document.getElementById('categoria_id').value;
+            const proveedor1Id = document.getElementById('proveedor1_id').value;
+            const proveedor2Id = document.getElementById('proveedor2_id').value;
+
+            if (!categoriaId || !proveedor1Id || !proveedor2Id) {
+                alert('Por favor, selecciona la categoría y los proveedores.');
+                return;
+            }
+
+            console.log('Datos enviados:', { 
+                categoria: categoriaId,
+                proveedor1: proveedor1Id,
+                proveedor2: proveedor2Id });
+
+            fetch('/calcular-costo-eficiencia/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}',
+                },
+                body: JSON.stringify({
+                    categoria: categoriaId,
+                    proveedor1: proveedor1Id,
+                    proveedor2: proveedor2Id,
+                }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert(data.error);
+                } else {
+                    document.getElementById('datosProveedor1').value = `
+                    Costo de insumo: $${data.proveedor1.costo}
+                    Tiempo de entrega: ${data.proveedor1.tiempo} días
+                    Costo-Eficiencia: ${data.proveedor1.eficiencia}%`;
+                    document.getElementById('datosProveedor2').value = `
+                    Costo de insumo: $${data.proveedor2.costo}
+                    Tiempo de entrega: ${data.proveedor2.tiempo} días
+                    Costo-Eficiencia: ${data.proveedor2.eficiencia}%`;
+                    document.getElementById('resultadoFinal').value = data.resultado;
+                }
+            })
+            .catch(error => console.error('Error:', error));
+
+        });
+    </script>
+
 {% endblock %}

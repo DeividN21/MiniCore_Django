@@ -178,12 +178,12 @@
                         const rentabilidad2 = parseFloat(data.categoria2?.rentabilidad) || 0;
 
                         const rentabilidadResultado = parseFloat(data.resultado?.rentabilidad) || 0;
-                        
+
                         // Funcion para la clasificacion de rentabilidad
                         function obtenerDetalleRentabilidad(valorRentabilidad) {
                             const filas = document.querySelectorAll("table tbody tr");
                             let detalle = "No definido";
-
+                            //Iteracion de cada rango y detalle
                             filas.forEach(fila => {
                                 const rangoTexto = fila.cells[0].textContent.trim();
                                 const detalleTexto = fila.cells[1].textContent.trim();

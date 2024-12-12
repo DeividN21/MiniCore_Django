@@ -37,4 +37,6 @@ urlpatterns = [
     path('costoEficiencia', views.consultarCostoEficiencia, name='consultarCostoEficiencia'),
     path('salir/',views.salir, name='salir'),
     path('calcular-rentabilidad/', views.calcular_rentabilidad, name='calcular_rentabilidad'),
+    path('calcular-costo-eficiencia/', views.calcularCostoEficiencia, name='calcular_costo_eficiencia'),
+    path('proveedores-por-categoria/<int:categoria_id>/', views.proveedores_por_categoria, name='proveedores_por_categoria'),
 ]

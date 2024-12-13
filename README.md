@@ -35,7 +35,7 @@ Presentar las funcionalidades del proyecto Core MVC, en base a lo planteado en e
 - Si el usuario quiere salir puede aplastar el botón de "Cerrar Sesión", el cual redirige a la página web principal.
 
 # Enlace del Video de Demostración
-- enlace
+- https://udlaec.sharepoint.com/:v:/s/Section_2729362848/EXf-Z4lcK11Hlz3TqMe-590B0e_SAK9NErxb621o7H-vNQ?e=vldNeQ&nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJTdHJlYW1XZWJBcHAiLCJyZWZlcnJhbFZpZXciOiJTaGFyZURpYWxvZy1MaW5rIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXcifX0%3D
   
 # Enlace con el deploy
-- enlace
+- https://minicore-django.onrender.com

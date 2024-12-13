@@ -4,8 +4,12 @@
 
     {% if messages %}
         {% for message in messages %}
-            <div class="alert alert-success">{{message}}</div>
-        {% endfor%}
+            {% if message.tags == 'error' %}
+                <div class="alert alert-danger">{{ message }}</div>
+            {% else %}
+                <div class="alert alert-success">{{ message }}</div>
+            {% endif %}
+        {% endfor %}
     {% endif %}
 
     <h1 class="text-center"> REGISTRO </h1> <br>

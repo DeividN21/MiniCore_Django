@@ -1,0 +1,91 @@
+{% extends 'plantilla.html' %}
+
+{% block content %}
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-success">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+    <h2 class="text-center">Pedidos</h2>
+    <div class="text-end">
+        <a href="{% url 'salir' %}" class="btn btn-info m-3">Cerrar Sesión</a>
+    </div>
+
+    <!-- Formulario de filtrado -->
+    <form class="w-50 shadow mx-auto p-4 m-3" method="post" action="{% url 'consultarPedidos' %}">
+        {% csrf_token %}
+        <h4>Filtrar Pedidos por Fecha</h4>
+        Fecha Inicial: <input type="date" name="fechaInicial" class="form-control my-2" required>
+        Fecha Final: <input type="date" name="fechaFinal" class="form-control my-2" required>
+        <div class="text-center">
+            <input type="submit" name="filtrar" value="Filtrar" class="btn btn-primary px-5">
+        </div>
+    </form>
+
+    <!-- Resultado de los proveedores más rápidos -->
+    {% if pedidos_mas_rapidos %}
+        <div class="mt-4">
+            <h4>Proveedores que han entregado más rápido:</h4>
+            <textarea class="form-control" rows="6" readonly>
+                {% for proveedor, producto in pedidos_mas_rapidos %}
+                    Proveedor: {{ proveedor.nombreProveedor }}, Producto: {{ producto }}, Tiempo de entrega: {{ tiempo_mas_rapido }} días
+                {% endfor %}
+            </textarea>
+        </div>
+    {% endif %}
+
+    <!-- Formulario de ingreso de pedidos -->
+    <form class="w-50 shadow mx-auto p-4 m-3" method="post" action="{% url 'guardarPedido' %}">
+        {% csrf_token %}
+        Producto del Pedido: <input type="text" name="pedidoProducto" class="form-control my-2" required>
+        Fecha del Pedido: <input type="date" name="fechaPedido" class="form-control my-2" required>
+        Fecha de Entrega: <input type="date" name="fechaEntrega" class="form-control my-2" required>
+        Proveedor:
+        <select name="nombreProveedorPedido" class="form-select my-2" required>
+            <option selected></option>
+            {% for proveedor in proveedores %}
+                <option value="{{ proveedor.id }}">{{ proveedor.nombreProveedor }}</option>
+            {% endfor %}
+        </select>
+        <div class="text-center">
+            <input type="submit" value="Guardar" class="btn btn-success px-5">
+        </div>
+    </form>
+
+    <!-- Tabla de pedidos -->
+    <table class="table table-success w-75 mx-auto text-center">
+        <tr class="table-dark">
+            <th>Producto</th>
+            <th>Fecha del Pedido</th>
+            <th>Fecha de Entrega</th>
+            <th>Proveedor</th>
+            <th colspan="2">Acciones</th>
+        </tr>
+        {% for pedido in pedidos %}
+        <tr>
+            <td>{{ pedido.pedidoProducto }}</td>
+            <td>{{ pedido.fechaPedido }}</td>
+            <td>{{ pedido.fechaEntrega }}</td>
+            <td>{{ pedido.nombreProveedorPedido.nombreProveedor }}</td>
+            <td>
+                <form action="{% url 'eliminarPedido' pedido.id %}" method="post">
+                    {% csrf_token %}
+                    <button class="btn btn-danger" onclick="return confirm('¿Estás seguro de eliminar este pedido?')">
+                        <i class="fa-solid fa-trash-can"></i>
+                    </button>
+                </form>
+            </td>
+            <td>
+                <form action="{% url 'detallePedido' pedido.id %}" method="post">
+                    {% csrf_token %}
+                    <button class="btn btn-warning">
+                        <i class="fa-regular fa-pen-to-square"></i>
+                    </button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+{% endblock %}

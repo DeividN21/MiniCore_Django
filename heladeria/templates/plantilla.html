@@ -48,6 +48,10 @@
                 <a class="nav-link {% if request.resolver_match.url_name == 'consultarCostoEficiencia' %}active{% endif %}" 
                    href="{% url 'consultarCostoEficiencia' %}">Costo-Eficiencia</a>
               </li>
+              <li class="nav-item">
+                <a class="nav-link {% if request.resolver_match.url_name == 'consultarPedidos' %}active{% endif %}" 
+                   href="{% url 'consultarPedidos' %}">Pedidos</a>
+              </li>
             </ul>
           </div>
         </div>

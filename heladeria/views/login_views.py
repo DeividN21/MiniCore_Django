@@ -26,6 +26,9 @@ def registro(request):
         if request.POST["password1"] != request.POST["password2"]:
             messages.error(request, 'Las contraseñas no coinciden!')
             return render(request, "registro.html", {'form': UserCreationForm})
+        elif len(request.POST["password1"]) < 8:
+            messages.error(request, 'La contraseña debe tener al menos 8 caracteres.')
+            return render(request, "registro.html", {'form': UserCreationForm})
         else:
             name = request.POST["username"]
             password = request.POST["password2"]
@@ -36,7 +39,7 @@ def registro(request):
 
 @login_required
 def home(request):
-    return render(request,"principal.html")
+    return render(request, "principal.html")
 
 def salir(request):
     logout(request)

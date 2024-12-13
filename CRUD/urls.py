@@ -39,4 +39,9 @@ urlpatterns = [
     path('calcular-rentabilidad/', views.calcular_rentabilidad, name='calcular_rentabilidad'),
     path('calcular-costo-eficiencia/', views.calcularCostoEficiencia, name='calcular_costo_eficiencia'),
     path('proveedores-por-categoria/<int:categoria_id>/', views.proveedores_por_categoria, name='proveedores_por_categoria'),
+    path('pedidos/', views.consultarPedidos, name='consultarPedidos'),
+    path('pedidos/guardar/', views.guardarPedido, name='guardarPedido'),
+    path('pedidos/eliminar/<int:id>/', views.eliminarPedido, name='eliminarPedido'),
+    path('pedidos/detalle/<int:id>/', views.detallePedido, name='detallePedido'),
+    path('pedidos/editar/', views.editarPedido, name='editarPedido'),
 ]
